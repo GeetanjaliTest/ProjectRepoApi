@@ -5,6 +5,9 @@ on:
     branches: [ '**' ]
   pull_request:
 
+permissions:
+  contents: write
+
 jobs:
   run-tests:
     name: Run FastAPI & API Tests
@@ -83,8 +86,8 @@ jobs:
           path: api-automation/target/site/jacoco
 
       - name: Publish Allure Report to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: api-automation/target/allure-report
