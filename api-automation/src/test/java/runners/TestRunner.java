@@ -6,7 +6,7 @@ import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        features = "src/test/java/features", // Adjust path if needed
+        features = "src/test/java/features",
         glue = {"stepdefs"},
         plugin = {
                 "pretty",
@@ -15,4 +15,8 @@ import io.cucumber.junit.CucumberOptions;
         monochrome = true,
         publish = true
 )
-public class TestRunner {}
+public class TestRunner {
+        static {
+                System.setProperty("allure.results.directory", "target/allure-results");
+        }
+}
