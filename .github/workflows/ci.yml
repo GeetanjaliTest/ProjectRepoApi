@@ -56,33 +56,33 @@ jobs:
           sudo ln -s /opt/allure/bin/allure /usr/bin/allure
           allure --version
 
-      - name: Run Cucumber Tests
+      - name: Run API Tests with Maven
         working-directory: api-automation
-        run: mvn clean test
+        run: mvn clean verify
 
-      - name: Debug Allure Results
+      - name: Verify Allure Results Exist
         working-directory: api-automation
         run: |
-          echo "Listing Allure result files:"
-          ls -lR target/allure-results || echo "No results found"
-          cat target/allure-results/* || echo "No content"
+          echo "Verifying Allure results..."
+          if [ -d "target/allure-results" ] && [ "$(ls -A target/allure-results)" ]; then
+            echo "Allure results directory is valid."
+          else
+            echo "ERROR: Allure results directory is missing or empty."
+            exit 1
+          fi
 
-      - name: Generate Allure Report
+      - name: Generate Allure HTML Report
         working-directory: api-automation
         run: |
           allure generate target/allure-results --clean -o target/allure-report
+          # Fix absolute paths for GitHub Pages
           find target/allure-report -type f -name '*.html' -exec sed -i 's|href="/|href="./|g; s|src="/|src="./|g' {} +
-        continue-on-error: true
 
       - name: Upload Allure HTML Report
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: api-automation/target/allure-report
-
-      - name: Generate Code Coverage Report
-        working-directory: api-automation
-        run: mvn verify
 
       - name: Upload JaCoCo Code Coverage Report
         uses: actions/upload-artifact@v4
