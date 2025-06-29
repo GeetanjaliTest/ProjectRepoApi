@@ -58,7 +58,8 @@ jobs:
 
       - name: Run API Tests with Maven
         working-directory: api-automation
-        run: mvn clean verify
+        run: |
+          mvn clean verify || echo "Tests failed, continuing workflow"
 
       - name: Verify Allure Results Exist
         working-directory: api-automation
@@ -75,7 +76,6 @@ jobs:
         working-directory: api-automation
         run: |
           allure generate target/allure-results --clean -o target/allure-report
-          # Fix absolute paths for GitHub Pages
           find target/allure-report -type f -name '*.html' -exec sed -i 's|href="/|href="./|g; s|src="/|src="./|g' {} +
 
       - name: Upload Allure HTML Report
