@@ -86,3 +86,46 @@ Workflow (`ci.yml`) automates:
 * Artifact uploads (test report, coverage)
 * Optional: Deploy Allure HTML to GitHub Pages (on `gh-pages` branch)
 
+
+## Testing Strategy
+
+### Test Flow Design
+
+* Used Cucumber with Gherkin syntax to create clear and human-readable test scenarios.
+* Grouped scenarios logically based on API features and endpoints.
+* Reused common step definitions to avoid duplication.
+
+### Reliability and Maintainability
+
+* Ensured test isolation and consistent test data for reliability.
+* Integrated Allure reporting and JaCoCo for visibility and metrics.
+* Structured codebase to separate test logic from configuration and data.
+
+### Challenges and Resolutions
+
+* Faced FastAPI availability issues; resolved by starting it in the CI pipeline.
+* Fixed Cucumber feature path errors by correcting runner configuration.
+* Configured CI to continue execution after test failures for full report generation.
+
+### Covered Endpoints
+
+### Book Management
+* POST /books/: Create a new book.
+
+* PUT /books/{book_id}: Update a book by ID.
+
+* DELETE /books/{book_id}: Delete a book by ID.
+
+* GET /books/{book_id}: Get a book by ID.
+
+
+### User Authentication
+* POST /signup: Sign up a new user.
+
+* POST /login: Log in and receive an access token.
+
+### Health Check
+* GET /health: Check the health of the API.
+
+
+
