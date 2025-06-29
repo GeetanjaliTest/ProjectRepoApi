@@ -56,15 +56,16 @@ jobs:
           sudo ln -s /opt/allure/bin/allure /usr/bin/allure
           allure --version
 
-      - name: Run Cucumber Tests & Generate Allure Results
+      - name: Run Cucumber Tests
         working-directory: api-automation
-        run: mvn clean test -Dallure.results.directory=target/allure-results
-        continue-on-error: true
+        run: mvn clean test
 
-      - name: Generate Code Coverage Report
+      - name: Debug Allure Results
         working-directory: api-automation
-        run: mvn verify
-        continue-on-error: true
+        run: |
+          echo "Listing Allure result files:"
+          ls -lR target/allure-results || echo "No results found"
+          cat target/allure-results/* || echo "No content"
 
       - name: Generate Allure Report
         working-directory: api-automation
@@ -78,6 +79,10 @@ jobs:
         with:
           name: allure-report
           path: api-automation/target/allure-report
+
+      - name: Generate Code Coverage Report
+        working-directory: api-automation
+        run: mvn verify
 
       - name: Upload JaCoCo Code Coverage Report
         uses: actions/upload-artifact@v4
